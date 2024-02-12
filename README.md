@@ -1,109 +1,11 @@
-*Psst  looking for a more complete solution? Check out [SvelteKit](https://kit.svelte.dev), the official framework for building web applications of all sizes, with a beautiful development experience and flexible filesystem-based routing.*
+# 2D Convex Quadriliteral to Ellipse Conversion
 
-*Looking for a shareable component template instead? Go here --> [sveltejs/component-template](https://github.com/sveltejs/component-template)*
+![Screenshot Preview](./preview.png)
 
----
+A 3-dimensional scene can be rendered by projecting the geometry from 3D space onto a 3-dimensional plane. The proportion of the geometry may be distorted in the process to achieve a perspective effect. Especially circles are being squished into ellipses when being projected. But the exact relation between the size and position of a circle and 3D space and the resulting size and position of the projected ellipse is not that straight-forward as one might think.
 
-# svelte app
+So when rendering a 3D scene containg circular shapes one could simply first discretizing the circle into line segments and then projecting only theses segments with is easily done by just transforming the end-points of each segment. But discretizing smooth shapes to early might reduce later image quality.
 
-This is a project template for [Svelte](https://svelte.dev) apps. It lives at https://github.com/sveltejs/template.
+So the better alternative might be to project the smooth circular shape from 3-dimensions into the correct smooth 2-dimensional ellipse. Christopher Brierley Jones describes the process on his website. The idea is instead of projecting the circle, to project it's bounding rectangle and then find the matrix that transforms that resulting quadriliteral into a unit square. Then extract the parameters of the ellipse from this matrix. The key insight is that for each convex quadriliteral is exactly one largest ellipse that fits it perfectly (by being tangential on all 4 sides). And the perspective projection of the bounding rectangle is always a convex quadriliteral.
 
-To create a new project based on this template using [degit](https://github.com/Rich-Harris/degit):
-
-```bash
-npx degit sveltejs/template svelte-app
-cd svelte-app
-```
-
-*Note that you will need to have [Node.js](https://nodejs.org) installed.*
-
-
-## Get started
-
-Install the dependencies...
-
-```bash
-cd svelte-app
-npm install
-```
-
-...then start [Rollup](https://rollupjs.org):
-
-```bash
-npm run dev
-```
-
-Navigate to [localhost:5000](http://localhost:5000). You should see your app running. Edit a component file in `src`, save it, and reload the page to see your changes.
-
-By default, the server will only respond to requests from localhost. To allow connections from other computers, edit the `sirv` commands in package.json to include the option `--host 0.0.0.0`.
-
-If you're using [Visual Studio Code](https://code.visualstudio.com/) we recommend installing the official extension [Svelte for VS Code](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode). If you are using other editors you may need to install a plugin in order to get syntax highlighting and intellisense.
-
-## Building and running in production mode
-
-To create an optimised version of the app:
-
-```bash
-npm run build
-```
-
-You can run the newly built app with `npm run start`. This uses [sirv](https://github.com/lukeed/sirv), which is included in your package.json's `dependencies` so that the app will work when you deploy to platforms like [Heroku](https://heroku.com).
-
-
-## Single-page app mode
-
-By default, sirv will only respond to requests that match files in `public`. This is to maximise compatibility with static fileservers, allowing you to deploy your app anywhere.
-
-If you're building a single-page app (SPA) with multiple routes, sirv needs to be able to respond to requests for *any* path. You can make it so by editing the `"start"` command in package.json:
-
-```js
-"start": "sirv public --single"
-```
-
-## Using TypeScript
-
-This template comes with a script to set up a TypeScript development environment, you can run it immediately after cloning the template with:
-
-```bash
-node scripts/setupTypeScript.js
-```
-
-Or remove the script via:
-
-```bash
-rm scripts/setupTypeScript.js
-```
-
-If you want to use `baseUrl` or `path` aliases within your `tsconfig`, you need to set up `@rollup/plugin-alias` to tell Rollup to resolve the aliases. For more info, see [this StackOverflow question](https://stackoverflow.com/questions/63427935/setup-tsconfig-path-in-svelte).
-
-## Deploying to the web
-
-### With [Vercel](https://vercel.com)
-
-Install `vercel` if you haven't already:
-
-```bash
-npm install -g vercel
-```
-
-Then, from within your project folder:
-
-```bash
-cd public
-vercel deploy --name my-project
-```
-
-### With [surge](https://surge.sh/)
-
-Install `surge` if you haven't already:
-
-```bash
-npm install -g surge
-```
-
-Then, from within your project folder:
-
-```bash
-npm run build
-surge public my-project.surge.sh
-```
+But I could not find any showcase implementation or ready to use code of this approach online so I implemented it myself according to Christopher Brierley Jones notes. So feel free to play around by morphing the circle above or use my implementation. My implementation is licensed under MIT
