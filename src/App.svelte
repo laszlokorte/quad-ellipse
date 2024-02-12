@@ -126,7 +126,6 @@
 		display: block;
 		height: auto;
 		border: 1px solid gray;
-		min-width: 40vw;
 		flex-shrink: 0;
 		flex-grow: 1;
 		width: 100%;
